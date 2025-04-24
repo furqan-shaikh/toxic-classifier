@@ -1,6 +1,7 @@
 {
     "base_download_url":"https://github.com/furqan-shaikh/toxic-classifier/releases/download/",
-    "original_small": "v0.0.1-beta/albert_toxic_classifier.ckpt",
-    "original_laerge": "",
-    "cache_dir": "~/.cache/toxic_classifier"
+    "original_small": "v0.0.1-beta/albert_untoxify_0.0.1.ckpt",
+    "original_large": "",
+    "cache_dir": "~/.cache/toxic_classifier",
+    "classes":["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
 }

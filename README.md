@@ -8,6 +8,9 @@ This repo provides model and code for fine-tuning a transformer model on a speci
 Used in LLM Observability suite to detect and monitor potentially harmful or inappropriate content within LLM outputs.
 
 # Prediction
+1. git clone https://github.com/furqan-shaikh/toxic-classifier.git
+2. Create python virtual environment and install requirements
+3. 
 
 # Training
 1. Download data from Kaggle here
@@ -16,6 +19,9 @@ Used in LLM Observability suite to detect and monitor potentially harmful or ina
 3. Create python virtual environment and install requirements
 4. Run: `python training_runner.py`
 5. At the end of the training, the fine-tuned model is available at the path provided in config json
+
+## Architecture
+![untoxify_architecture.png](docs/untoxify_architecture.png)
 
 # What's pending
 1. Model Evaluation

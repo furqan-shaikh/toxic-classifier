@@ -1,60 +1,64 @@
-
-from typing import Union, List
 import os
 import requests
 import time
 import json
 from dataclasses import dataclass
-
+from typing import List
 import torch
-from transformers import AlbertTokenizer
-
 from training_module import ToxicClassifier
+
 @dataclass
 class PredictionConfig:
     base_download_url: str
     original_small: str
     cache_dir: str
+    classes: List[str]
     original_large: str = ""
 
 def load_config(config_path: str):
-    with open(config_path) as f:
+    with open(os.path.join(os.path.dirname(__file__), config_path)) as f:
         return _build_config_data(json.load(f))
 
 def _build_config_data(config):
     return PredictionConfig(
         base_download_url= config["base_download_url"],
         original_small= config["original_small"],
-        cache_dir=config["cache_dir"]
+        cache_dir=config["cache_dir"],
+        classes=config["classes"]
     )
 
-def run_prediction(model_type:str, comments=Union[str, List[str]]):
+def run_prediction(model_type:str, comments=List[str]):
     """
     Run prediction based on the model type for the provided comments. The valid model_type values are:
     - original_small
     """
-    config_path = os.path.join(os.path.dirname(__file__), "config/config.json")
-    config = load_config(config_path)
-    model_path = _download_model(config, model_type)
-    model = _load_model(model_path)
-    tokenizer = _load_tokenizer(model_type)
-
-    # # Tokenize the input comment
-    inputs = tokenizer(comments, return_tensors="pt", truncation=True, padding=True)
-    inputs = {k: v.to(model.device) for k, v in inputs.items()}
+    config = load_config(config_path= "config/config.json")
+    model = _get_model(config, model_type)
+    # always call before doing inference / prediction.
+    model.eval()
     with torch.no_grad():
         # do prediction on the model
         logits = model(comments)
         # convert logits to probabilities
         probs = torch.sigmoid(logits)
         predictions = (probs > 0.5).int()
-    for label, prob, pred in zip(["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"], probs[0], predictions[0]):
-        print(f"{label:15} | prob: {prob:.2f} | pred: {pred.item()}")
+    results = []
+    for prob, pred in zip(probs, predictions):
+        res = []
+        for label, probability, prediction in zip(config.classes, prob, pred):
+            res.append({
+                "label": label,
+                "probability":  round(probability.item(), 2),
+                "prediction": prediction.item()
+            })
+        results.append(res)
+    return results
 
 def _download_model(config: PredictionConfig, model_type: str):
     os.makedirs(os.path.expanduser(config.cache_dir), exist_ok=True)
     filename = os.path.basename(config.original_small)
     local_path = os.path.join(os.path.expanduser(config.cache_dir), filename)
+    model_url = ""
     if model_type == "original_small":
         model_url = f"{config.base_download_url}{config.original_small}"
     
@@ -77,12 +81,7 @@ def _load_model(model_file: str):
     print("-Model loaded in -- %s seconds ---" % (time.time() - start_time))
     return model
 
-def _load_tokenizer(model_type: str):
-    # load the tokenizer
-    if model_type == "original_small":
-        return AlbertTokenizer.from_pretrained("albert-base-v2")
-
-
-run_prediction(model_type="original_small", comments="i dont like you, you sucker")
-# run_prediction(model_file="training_toxic_run_1.ckpt", comment="Fuck off, you anti-semitic cunt.")
-
+def _get_model(config, model_type):
+    model_path = _download_model(config, model_type)
+    model = _load_model(model_path)
+    return model
