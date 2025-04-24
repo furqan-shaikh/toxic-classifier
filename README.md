@@ -13,7 +13,8 @@ Used in LLM Observability suite to detect and monitor potentially harmful or ina
 3. Run:
    ```python
    from prediction_runner import run_prediction
-   results = run_prediction(model_type="original_small", comments=["i dont like you, you sucker","i like you"])
+   results = run_prediction(model_type="original_small",
+                            comments=["i dont like you, you sucker","i like you"])
    # [
    #    [{'label': 'toxic', 'probability': 0.95, 'prediction': 1},
    #    {'label': 'severe_toxic', 'probability': 0.03, 'prediction': 0}, 
