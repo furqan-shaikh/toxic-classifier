@@ -15,8 +15,19 @@ Used in LLM Observability suite to detect and monitor potentially harmful or ina
    from prediction_runner import run_prediction
    results = run_prediction(model_type="original_small", comments=["i dont like you, you sucker","i like you"])
    # [
-   #    [{'label': 'toxic', 'probability': 0.95, 'prediction': 1}, {'label': 'severe_toxic', 'probability': 0.03, 'prediction': 0}, {'label': 'obscene', 'probability': 0.53, 'prediction': 1}, {'label': 'threat', 'probability': 0.01, 'prediction': 0}, {'label': 'insult', 'probability': 0.82, 'prediction': 1}, {'label': 'identity_hate', 'probability': 0.02, 'prediction': 0}],
-   #    [{'label': 'toxic', 'probability': 0.01, 'prediction': 0}, {'label': 'severe_toxic', 'probability': 0.0, 'prediction': 0}, {'label': 'obscene', 'probability': 0.0, 'prediction': 0}, {'label': 'threat', 'probability': 0.0, 'prediction': 0}, {'label': 'insult', 'probability': 0.0, 'prediction': 0}, {'label': 'identity_hate', 'probability': 0.0, 'prediction': 0}]
+   #    [{'label': 'toxic', 'probability': 0.95, 'prediction': 1},
+   #    {'label': 'severe_toxic', 'probability': 0.03, 'prediction': 0}, 
+   #    {'label': 'obscene', 'probability': 0.53, 'prediction': 1},
+   #    {'label': 'threat', 'probability': 0.01, 'prediction': 0},
+   #    {'label': 'insult', 'probability': 0.82, 'prediction': 1},
+   #    {'label': 'identity_hate', 'probability': 0.02, 'prediction': 0}],
+   
+   #    [{'label': 'toxic', 'probability': 0.01, 'prediction': 0},
+   #    {'label': 'severe_toxic', 'probability': 0.0, 'prediction': 0}, 
+   #    {'label': 'obscene', 'probability': 0.0, 'prediction': 0},
+   #    {'label': 'threat', 'probability': 0.0, 'prediction': 0},
+   #    {'label': 'insult', 'probability': 0.0, 'prediction': 0},
+   #    {'label': 'identity_hate', 'probability': 0.0, 'prediction': 0}]
    # ]
    ```
 
