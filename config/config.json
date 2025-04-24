@@ -1,0 +1,6 @@
+{
+    "base_download_url":"https://github.com/furqan-shaikh/toxic-classifier/releases/download/",
+    "original_small": "v0.0.1-beta/albert_toxic_classifier.ckpt",
+    "original_laerge": "",
+    "cache_dir": "~/.cache/toxic_classifier"
+}

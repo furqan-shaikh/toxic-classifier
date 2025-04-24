@@ -1,0 +1,32 @@
+{
+    "current_model": "albert",
+    "classes":["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"],
+    "models": [
+        {
+            "model_key": "albert",
+            "model_type": "albert-base-v2",
+            "model_name": "AlbertForSequenceClassification",
+            "tokenizer": "AlbertTokenizer"
+        }
+    ],
+    "data" :{
+        "training": {
+            "path": "/Users/furqanshaikh/Documents/dev/detoxify-playground/untoxify/data/train.csv"
+        }
+    },
+    "run_args": {
+        "batch_size": 10,
+        "shuffle": true,
+        "epoch": 1,
+        "accumulate_grad_batches": 3
+    },
+    "adam_optimizer": {
+        "lr":  3e-5,
+        "weight_decay": 3e-6,
+        "amsgrad": true
+    },
+    "checkpoint": {
+        "name": "albert_untoxify_1.ckpt",
+        "path": "/Users/furqanshaikh/Documents/dev/detoxify-playground/untoxify/models/"
+    }
+}

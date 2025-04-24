@@ -1,0 +1,8 @@
+pandas
+transformers
+torch
+datasets
+sentencepiece
+lightning
+requests
+tqdm
