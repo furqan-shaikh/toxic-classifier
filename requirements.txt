@@ -7,3 +7,4 @@ lightning
 requests
 tqdm
 gradio
+fastapi
