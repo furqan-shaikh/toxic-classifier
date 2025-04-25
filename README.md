@@ -32,6 +32,15 @@ Used in LLM Observability suite to detect and monitor potentially harmful or ina
    # ]
    ```
 
+# Gradio
+1. git clone https://github.com/furqan-shaikh/toxic-classifier.git
+2. Create python virtual environment and install requirements
+3. Run: `python gradio_app.py`
+4. Launch the URL in a browser: `http://127.0.0.1:7860`
+5. Enter comments separated by `,` and click `Submit`.
+6. Results are shown in `Predictions` UI
+![gradio.png](docs/gradio.png)
+
 # Training
 1. Download data from Kaggle here
 2. Under `config/training_toxic_classification_config.json`, make the following changes:

@@ -6,3 +6,4 @@ sentencepiece
 lightning
 requests
 tqdm
+gradio
