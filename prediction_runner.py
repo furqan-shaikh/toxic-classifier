@@ -2,10 +2,18 @@ import os
 import requests
 import time
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 import torch
 from training_module import ToxicClassifier
+from model_tokenizer import get_model_instance, get_tokenizer_instance
+
+@dataclass
+class ModelTokenizerConfig:
+    model_key: str
+    model_type: str
+    model_name: str
+    tokenizer: str
 
 @dataclass
 class PredictionConfig:
@@ -14,6 +22,7 @@ class PredictionConfig:
     cache_dir: str
     classes: List[str]
     original_large: str = ""
+    base_model_tokenizer: dict[str,ModelTokenizerConfig ] = field(default_factory=dict)
 
 def load_config(config_path: str):
     with open(os.path.join(os.path.dirname(__file__), config_path)) as f:
@@ -24,8 +33,21 @@ def _build_config_data(config):
         base_download_url= config["base_download_url"],
         original_small= config["original_small"],
         cache_dir=config["cache_dir"],
-        classes=config["classes"]
+        classes=config["classes"],
+        base_model_tokenizer=_load_base_model_tokenizer_config(config)
     )
+
+def _load_base_model_tokenizer_config(config):
+    base_model_tokenizer_config=config["base_model_tokenizer"]
+    base_model_tokenizer = {}
+    for key,value in base_model_tokenizer_config.items():
+        base_model_tokenizer[key] = ModelTokenizerConfig(
+            model_key=value["model_key"],
+            model_type=value["model_type"],
+            model_name=value["model_name"],
+            tokenizer=value["tokenizer"],
+        )
+    return base_model_tokenizer
 
 def run_prediction(model_type:str, comments=List[str]):
     """
@@ -58,11 +80,8 @@ def _download_model(config: PredictionConfig, model_type: str):
     os.makedirs(os.path.expanduser(config.cache_dir), exist_ok=True)
     filename = os.path.basename(config.original_small)
     local_path = os.path.join(os.path.expanduser(config.cache_dir), filename)
-    model_url = ""
-    if model_type == "original_small":
-        model_url = f"{config.base_download_url}{config.original_small}"
+    model_url = _load_base_model_tokenizer(config=config, model_type=model_type)
     
-
     if not os.path.exists(local_path):
         print(f"Downloading model from {model_url} to {local_path}...")
         response = requests.get(model_url)
@@ -73,6 +92,17 @@ def _download_model(config: PredictionConfig, model_type: str):
         print(f"Using cached model from {local_path}")
 
     return local_path
+
+def _load_base_model_tokenizer(config: PredictionConfig, model_type: str) -> str:
+    model_url = f"{config.base_download_url}{config.original_small}"
+
+    # load the model and tokenizer if not already available
+    base_model_tokenizer_config = config.base_model_tokenizer[model_type]
+    model= get_model_instance(class_name=base_model_tokenizer_config.model_name, model_name=base_model_tokenizer_config.model_type, num_labels=len(config.classes)),
+    tokenizer= get_tokenizer_instance(class_name=base_model_tokenizer_config.tokenizer, tokenizer_name=base_model_tokenizer_config.model_type)
+
+    return model_url
+
 
 def _load_model(model_file: str):
     start_time = time.time()

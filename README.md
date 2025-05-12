@@ -9,7 +9,11 @@ Used in LLM Observability suite to detect and monitor potentially harmful or ina
 
 # Prediction
 1. git clone https://github.com/furqan-shaikh/toxic-classifier.git
-2. Create python virtual environment and install requirements
+2. Create python virtual environment and install requirements. Use `python 3.9` and above
+    ```bash
+    python -m venv venv
+    pip install -r requirements.txt
+    ```
 
 ## Run using python code
    ```python

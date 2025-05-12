@@ -3,5 +3,13 @@
     "original_small": "v0.0.1-beta/albert_untoxify_0.0.1.ckpt",
     "original_large": "",
     "cache_dir": "~/.cache/toxic_classifier",
-    "classes":["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
+    "classes":["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"],
+    "base_model_tokenizer": {
+        "original_small": {
+            "model_key": "albert",
+            "model_type": "albert-base-v2",
+            "model_name": "AlbertForSequenceClassification",
+            "tokenizer": "AlbertTokenizer"
+        }
+    }
 }
